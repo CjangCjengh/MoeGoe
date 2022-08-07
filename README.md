@@ -1,3 +1,5 @@
+# GUI
+See [MoeGoe_GUI](https://github.com/CjangCjengh/MoeGoe_GUI)
 # Models
 ## Nene + Meguru + Yoshino + Mako + Murasame + Koharu + Nanami
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)

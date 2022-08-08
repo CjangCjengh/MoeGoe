@@ -13,7 +13,7 @@ from mel_processing import spectrogram_torch
 from scipy.io.wavfile import write
 
 def get_text(text, hps):
-    text_norm = text_to_sequence(text, hps_ms.symbols, hps.data.text_cleaners)
+    text_norm = text_to_sequence(text, hps.symbols, hps.data.text_cleaners)
     if hps.data.add_blank:
         text_norm = commons.intersperse(text_norm, 0)
     text_norm = LongTensor(text_norm)

@@ -4,7 +4,7 @@ See [MoeGoe_GUI](https://github.com/CjangCjengh/MoeGoe_GUI)
 ## Nene + Meguru + Yoshino + Mako + Murasame + Koharu + Nanami
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)
 
-Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EQ_X9rsRd6tCrztZcQ_ad6QBz8GNSnpPq9H_C6ASoLDkfA?e=LZHD2O) (243 epochs)
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EW0gHn46FeRGsoGZvWTy-FwBrKFhzKYf3n9_vLFeNoz_FA?e=gpkjED) (365 epochs)
 # How to use
 Run MoeGoe.exe
 ```

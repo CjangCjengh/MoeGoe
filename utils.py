@@ -6,7 +6,6 @@ import logging
 import json
 import subprocess
 import numpy as np
-import soundfile
 import librosa
 import torch
 
@@ -100,12 +99,7 @@ def plot_alignment_to_numpy(alignment, info=None):
 
 
 def load_audio_to_torch(full_path, target_sampling_rate):
-  audio, sampling_rate = soundfile.read(full_path, dtype=np.float32)
-  print(audio.shape)
-  if len(audio.shape) > 1:
-    audio = librosa.to_mono(audio.transpose(1, 0))
-  if sampling_rate != target_sampling_rate:
-    audio = librosa.resample(audio, orig_sr=sampling_rate, target_sr=target_sampling_rate)
+  audio, sampling_rate = librosa.load(full_path, sr=target_sampling_rate, mono=True)
   return torch.FloatTensor(audio.astype(np.float32))
 
 

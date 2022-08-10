@@ -89,16 +89,15 @@ if __name__ == '__main__':
             
                 
         elif choice == 'v':
-            wav_path = input('Path of a WAV file (22050 Hz, 16 bits, 1 channel) to convert:\n')
+            audio_path = input('Path of an audio file to convert:\n')
             print_speakers(hps_ms.speakers)
-            audio, sampling_rate = utils.load_wav_to_torch(wav_path)
+            audio = utils.load_audio_to_torch(audio_path, hps_ms.data.sampling_rate)
 
             originnal_id = get_speaker_id('Original speaker ID: ')
             target_id = get_speaker_id('Target speaker ID: ')
             out_path = input('Path to save: ')
 
-            y = audio / hps_ms.data.max_wav_value
-            y = y.unsqueeze(0)
+            y = audio.unsqueeze(0)
 
             spec = spectrogram_torch(y, hps_ms.data.filter_length,
                 hps_ms.data.sampling_rate, hps_ms.data.hop_length, hps_ms.data.win_length,

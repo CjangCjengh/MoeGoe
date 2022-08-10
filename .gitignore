@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# build
+build
+monotonic_align/core.c
+*.o
+*.so
+*.dll
+
+# data
+/config.json
+/*.pth

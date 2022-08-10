@@ -10,3 +10,4 @@ torchvision
 Unidecode
 pyopenjtalk
 ffmpeg
+jamo

@@ -7,13 +7,16 @@ logging.getLogger('numba').setLevel(logging.WARNING)
 import commons
 import utils
 from models import SynthesizerTrn
-from text import text_to_sequence
+from text import text_to_sequence, _clean_text
 from mel_processing import spectrogram_torch
 
 from scipy.io.wavfile import write
 
-def get_text(text, hps):
-    text_norm = text_to_sequence(text, hps.symbols, hps.data.text_cleaners)
+def get_text(text, hps, cleaned=False):
+    if cleaned:
+        text_norm = text_to_sequence(text, hps.symbols, [])
+    else:
+        text_norm = text_to_sequence(text, hps.symbols, hps.data.text_cleaners)
     if hps.data.add_blank:
         text_norm = commons.intersperse(text_norm, 0)
     text_norm = LongTensor(text_norm)
@@ -62,11 +65,22 @@ if __name__ == '__main__':
         choice = input('TTS or VC? (t/v):')
         if choice == 't':
             text = input('Text to read: ')
-            try:
-                stn_tst = get_text(text, hps_ms)
-            except:
-                print('Invalid text!')
-                sys.exit(1)
+            if text=='[ADVANCED]':
+                text = input('Raw text:')
+                print('Cleaned text is:')
+                print(_clean_text(text, hps_ms.data.text_cleaners))
+                text = input('Cleaned text to read:\n')
+                try:
+                    stn_tst = get_text(text, hps_ms, cleaned=True)
+                except:
+                    print('Invalid text!')
+                    sys.exit(1)
+            else:
+                try:
+                    stn_tst = get_text(text, hps_ms)
+                except:
+                    print('Invalid text!')
+                    sys.exit(1)
             
             print_speakers(hps_ms.speakers)
             speaker_id = get_speaker_id('Speaker ID: ')

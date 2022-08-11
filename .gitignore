@@ -372,3 +372,4 @@ monotonic_align/core.c
 # data
 /config.json
 /*.pth
+*.wav

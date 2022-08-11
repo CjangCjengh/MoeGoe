@@ -1,8 +1,10 @@
-import numpy as np
-import torch
-from ctypes import cdll
-maximum_path_c = cdll.LoadLibrary('./monotonic_align/core.dll')
+from numpy import zeros, int32, float32
+from torch import from_numpy
 
+from os import system
+system("cd monotonic_align && python3 setup.py build_ext --inplace")
+
+from .monotonic_align.core import maximum_path_c
 
 def maximum_path(neg_cent, mask):
   """ Cython optimized version.
@@ -11,10 +13,10 @@ def maximum_path(neg_cent, mask):
   """
   device = neg_cent.device
   dtype = neg_cent.dtype
-  neg_cent = neg_cent.data.cpu().numpy().astype(np.float32)
-  path = np.zeros(neg_cent.shape, dtype=np.int32)
+  neg_cent = neg_cent.data.cpu().numpy().astype(float32)
+  path = zeros(neg_cent.shape, dtype=int32)
 
-  t_t_max = mask.sum(1)[:, 0].data.cpu().numpy().astype(np.int32)
-  t_s_max = mask.sum(2)[:, 0].data.cpu().numpy().astype(np.int32)
+  t_t_max = mask.sum(1)[:, 0].data.cpu().numpy().astype(int32)
+  t_s_max = mask.sum(2)[:, 0].data.cpu().numpy().astype(int32)
   maximum_path_c(path, neg_cent, t_t_max, t_s_max)
-  return torch.from_numpy(path).to(device=device, dtype=dtype)
+  return from_numpy(path).to(device=device, dtype=dtype)

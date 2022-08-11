@@ -1,6 +1,10 @@
 from numpy import zeros, int32, float32
 from torch import from_numpy
-from monotonic_align.monotonic_align.core import maximum_path_c
+
+from os import system
+system("cd monotonic_align && python3 setup.py build_ext --inplace")
+
+from .monotonic_align.core import maximum_path_c
 
 def maximum_path(neg_cent, mask):
   """ Cython optimized version.

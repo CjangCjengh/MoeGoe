@@ -2,7 +2,7 @@ from numpy import zeros, int32, float32
 from torch import from_numpy
 
 from os import system
-system("cd monotonic_align && python3 setup.py build_ext --inplace")
+system("cd monotonic_align && python setup.py build_ext --inplace")
 
 from .monotonic_align.core import maximum_path_c
 

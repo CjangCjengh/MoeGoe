@@ -69,9 +69,10 @@ if __name__ == '__main__':
                 text = input('Raw text:')
                 print('Cleaned text is:')
                 print(_clean_text(text, hps_ms.data.text_cleaners))
-                text = input('Cleaned text to read:\n')
+                continue
+            if text[:9]=='[CLEANED]':
                 try:
-                    stn_tst = get_text(text, hps_ms, cleaned=True)
+                    stn_tst = get_text(text[9:], hps_ms, cleaned=True)
                 except:
                     print('Invalid text!')
                     sys.exit(1)

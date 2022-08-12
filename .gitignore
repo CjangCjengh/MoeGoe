@@ -373,3 +373,8 @@ monotonic_align/core.c
 /config.json
 /*.pth
 *.wav
+/monotonic_align/monotonic_align
+/resources
+/MoeGoe.spec
+/dist/MoeGoe
+/dist

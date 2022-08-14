@@ -378,3 +378,6 @@ monotonic_align/core.c
 /MoeGoe.spec
 /dist/MoeGoe
 /dist
+
+# MacOS
+.DS_Store

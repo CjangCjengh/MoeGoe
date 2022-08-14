@@ -56,7 +56,7 @@ if __name__ == '__main__':
             n_speakers=hps_ms.data.n_speakers,
             **hps_ms.model)
         _ = net_g_ms.eval()
-        _ = utils.load_checkpoint(model, net_g_ms, None)
+        utils.load_checkpoint(model, net_g_ms)
     except:
         print('Failed to load!')
         sys.exit(1)

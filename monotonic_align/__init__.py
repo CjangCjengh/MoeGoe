@@ -4,6 +4,10 @@ from torch import from_numpy
 from .core import maximum_path_jit
 
 def maximum_path(neg_cent, mask):
+  """ numba optimized version.
+  neg_cent: [b, t_t, t_s]
+  mask: [b, t_t, t_s]
+  """
   device = neg_cent.device
   dtype = neg_cent.dtype
   neg_cent = neg_cent.data.cpu().numpy().astype(float32)

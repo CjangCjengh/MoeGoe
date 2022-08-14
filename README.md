@@ -1,7 +1,10 @@
 # GUI
 See [MoeGoe_GUI](https://github.com/CjangCjengh/MoeGoe_GUI)
 # Online demo
-Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Try it out [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/skytnt/moe-japanese-tts)
+- Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [Gradio](https://github.com/gradio-app/gradio). Try it out [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/skytnt/moe-japanese-tts)
+
+- Integrated into Azure Cloud Function by [fumiama](https://github.com/fumiama), see API [here](https://github.com/fumiama/MoeGoe).
+
 # Models
 ## Nene + Meguru + Yoshino + Mako + Murasame + Koharu + Nanami
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)

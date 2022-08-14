@@ -6,11 +6,11 @@ Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces) using [
 ## Nene + Meguru + Yoshino + Mako + Murasame + Koharu + Nanami
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)
 
-Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EW0gHn46FeRGsoGZvWTy-FwBrKFhzKYf3n9_vLFeNoz_FA?e=gpkjED) (365 epochs)
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EXTQrTj-UJpItH3BmgIUvhgBNZk88P1tT_7GPNr4yegNyw?e=93bbpR) (365 epochs)
 ## Sua + Mimiru + Arin + Yeonhwa + Yuhwa + Seonbae
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EYXC9IqILZFJqe0kyFjb9XwBuLldZnQBEMGJxI3h_iYX3w?e=Q4GrVH)
 
-Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EeBKiHAbIcRAjhIEHGNMMOkBzo-iulHOZxTrX6Eot-9feg?e=wW8VsU) (417 epochs)
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/ESfLsfGbqbJJkC6NmZ5R1TkBbVLvTLeLG3u8jB2UfA4jtQ?e=cpw40v) (417 epochs)
 # How to use
 Run MoeGoe.exe
 ```

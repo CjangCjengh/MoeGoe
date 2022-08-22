@@ -51,7 +51,9 @@ Successfully saved!
 ### Nene + Meguru + Yoshino + Mako + Murasame + Koharu + Nanami
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/Ed7PXqaBdllAki0TPpeZorgBFdnxirbX_AYGUIiIcWAYNg?e=avxkWs)
 
-Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EW0gHn46FeRGsoGZvWTy-FwBrKFhzKYf3n9_vLFeNoz_FA?e=gpkjED) (365 epochs)
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EXTQrTj-UJpItH3BmgIUvhgBNZk88P1tT_7GPNr4yegNyw?e=5mcwgl) (365 epochs)
+
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EYH0aVcuLbVAgdTVRjmNNDgB8xSSBINAIHByWL1tp97hWg?e=ZvegdK) (H excluded)
 ### Hiyori + Kano + Asumi + Sio + Ameri + Miri + Hiromu + Ririko
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EbYG4z3PmwhKibN59Sb8GTkBHr7gvbz6tWtsuwkmtqB8oA?e=cbxH86)
 

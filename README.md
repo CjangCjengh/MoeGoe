@@ -57,7 +57,7 @@ Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh
 ### Hiyori + Kano + Asumi + Sio + Ameri + Miri + Hiromu + Ririko
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EbYG4z3PmwhKibN59Sb8GTkBHr7gvbz6tWtsuwkmtqB8oA?e=cbxH86)
 
-Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/ER31DYYGKEpBrAHCNZMIgJoBTKh9Cn-csfi8Bkg01GFsCA?e=yTewQr) (513 epochs)
+Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/ERNCwIXf51JGrkDODZ2Iy5oBpPKDPEvnd486ypQQyGmzZQ?e=1sSIED) (604 epochs)
 ## Korean
 ### Sua + Mimiru + Arin + Yeonhwa + Yuhwa + Seonbae
 Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/EYXC9IqILZFJqe0kyFjb9XwBuLldZnQBEMGJxI3h_iYX3w?e=Q4GrVH)

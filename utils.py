@@ -1,6 +1,7 @@
 import logging
 from json import loads
-from torch import load
+from torch import load, FloatTensor
+from numpy import float32
 import librosa
 
 
@@ -71,4 +72,4 @@ def get_hparams_from_file(config_path):
 
 def load_audio_to_torch(full_path, target_sampling_rate):
   audio, sampling_rate = librosa.load(full_path, sr=target_sampling_rate, mono=True)
-  return torch.FloatTensor(audio.astype(np.float32))
+  return FloatTensor(audio.astype(float32))

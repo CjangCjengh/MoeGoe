@@ -1,4 +1,4 @@
-import sys
+import sys, re
 from torch import no_grad, LongTensor
 import logging
 
@@ -70,9 +70,21 @@ if __name__ == '__main__':
                 print('Cleaned text is:')
                 print(_clean_text(text, hps_ms.data.text_cleaners))
                 continue
-            if text[:9]=='[CLEANED]':
+
+            length_scale=re.search(r'\[LENGTH=(.+?)\]',text)
+            if length_scale:
                 try:
-                    stn_tst = get_text(text[9:], hps_ms, cleaned=True)
+                    text=re.sub(r'\[LENGTH=(.+?)\]','',text)
+                    length_scale=float(length_scale.group(1))
+                except:
+                    print('Invalid length scale!')
+                    sys.exit(1)
+            else:
+                length_scale=1
+            
+            if '[CLEANED]' in text:
+                try:
+                    stn_tst = get_text(text.replace('[CLEANED]',''), hps_ms, cleaned=True)
                 except:
                     print('Invalid text!')
                     sys.exit(1)
@@ -85,7 +97,7 @@ if __name__ == '__main__':
             
             print_speakers(hps_ms.speakers)
             speaker_id = get_speaker_id('Speaker ID: ')
-
+            length_scale
             out_path = input('Path to save: ')
 
             try:
@@ -93,7 +105,7 @@ if __name__ == '__main__':
                     x_tst = stn_tst.unsqueeze(0)
                     x_tst_lengths = LongTensor([stn_tst.size(0)])
                     sid = LongTensor([speaker_id])
-                    audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
+                    audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=length_scale)[0][0,0].data.cpu().float().numpy()
                 write(out_path, hps_ms.data.sampling_rate, audio)
             except:
                 print('Failed to generate!')

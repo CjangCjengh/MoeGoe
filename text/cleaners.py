@@ -12,7 +12,7 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
      the symbols in symbols.py to match your data).
 '''
 
-import re
+import os, sys, re
 from unidecode import unidecode
 import pyopenjtalk
 from jamo import h2j, j2hcj
@@ -21,6 +21,8 @@ import jieba, cn2an
 import logging
 
 logging.getLogger('jieba').setLevel(logging.WARNING)
+jieba.set_dictionary(os.path.dirname(sys.argv[0])+'/jieba/dict.txt')
+jieba.initialize()
 
 
 # This is a list of Korean classifiers preceded by pure Korean numerals.

@@ -35,3 +35,16 @@ Target speaker ID: 6
 Path to save: demo.wav
 Successfully saved!
 ```
+## HuBERT-VITS
+```
+Path of a hubert-soft model: D:\Download\hubert-soft.pt
+Path of an audio file to convert:
+D:\dataset\demo.wav
+ID      Speaker
+0       XXXX
+1       XXXX
+2       XXXX
+Target speaker ID: 6
+Path to save: demo.wav
+Successfully saved!
+```

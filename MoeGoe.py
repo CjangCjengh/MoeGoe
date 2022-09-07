@@ -74,9 +74,9 @@ if __name__ == '__main__':
     except:
         print('Failed to load!')
         sys.exit(1)
-
-    while True:
-        if n_symbols!=0:
+    
+    if n_symbols!=0:
+        while True:
             choice = input('TTS or VC? (t/v):')
             if choice == 't':
                 text = input('Text to read: ')
@@ -158,14 +158,15 @@ if __name__ == '__main__':
                         
                 print('Successfully saved!')
                 ask_if_continue()
-        else:
-            model = input('Path of a hubert-soft model: ')
-            from hubert_model import hubert_soft
-            try:
-                hubert = hubert_soft(model)
-            except:
-                print('Failed to load!')
-                sys.exit(1)
+    else:
+        model = input('Path of a hubert-soft model: ')
+        from hubert_model import hubert_soft
+        try:
+            hubert = hubert_soft(model)
+        except:
+            print('Failed to load!')
+            sys.exit(1)
+        while True:
             audio_path = input('Path of an audio file to convert:\n')
             print_speakers(speakers)
             audio = utils.load_audio_to_torch(audio_path, hps_ms.data.sampling_rate).unsqueeze(0).unsqueeze(0)

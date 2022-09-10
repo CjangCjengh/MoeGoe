@@ -169,7 +169,7 @@ if __name__ == '__main__':
         while True:
             audio_path = input('Path of an audio file to convert:\n')
             print_speakers(speakers)
-            audio = utils.load_audio_to_torch(audio_path, hps_ms.data.sampling_rate).unsqueeze(0).unsqueeze(0)
+            audio = utils.load_audio_to_torch(audio_path, 16000).unsqueeze(0).unsqueeze(0)
 
             target_id = get_speaker_id('Target speaker ID: ')
             out_path = input('Path to save: ')

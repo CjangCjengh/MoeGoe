@@ -44,6 +44,25 @@ def get_speaker_id(message):
         sys.exit(1)
     return speaker_id
 
+def get_label_value(text, label, default, warning_name='value'):
+    value=re.search(rf'\[{label}=(.+?)\]',text)
+    if value:
+        try:
+            text=re.sub(rf'\[{label}=(.+?)\]','',text,1)
+            value=float(value.group(1))
+        except:
+            print(f'Invalid {warning_name}!')
+            sys.exit(1)
+    else:
+        value=default
+    return value, text
+
+def get_label(text,label):
+    if f'[{label}]' in text:
+        return True,text.replace(f'[{label}]','')
+    else:
+        return False,text
+
 if __name__ == '__main__':
     model = input('Path of a VITS model: ')
     config = input('Path of a config file: ')
@@ -85,34 +104,17 @@ if __name__ == '__main__':
                     print('Cleaned text is:')
                     print(_clean_text(text, hps_ms.data.text_cleaners))
                     continue
-
-                length_scale=re.search(r'\[LENGTH=(.+?)\]',text)
-                if length_scale:
-                    try:
-                        text=re.sub(r'\[LENGTH=(.+?)\]','',text,1)
-                        length_scale=float(length_scale.group(1))
-                    except:
-                        print('Invalid length scale!')
-                        sys.exit(1)
-                else:
-                    length_scale=1
                 
-                if '[CLEANED]' in text:
-                    try:
-                        stn_tst = get_text(text.replace('[CLEANED]',''), hps_ms, cleaned=True)
-                    except:
-                        print('Invalid text!')
-                        sys.exit(1)
-                else:
-                    try:
-                        stn_tst = get_text(text, hps_ms)
-                    except:
-                        print('Invalid text!')
-                        sys.exit(1)
+                length_scale,text=get_label_value(text,'LENGTH',1,'length scale')
+                cleaned,text=get_label(text,'CLEANED')
+                try:
+                    stn_tst = get_text(text, hps_ms, cleaned=cleaned)
+                except:
+                    print('Invalid text!')
+                    sys.exit(1)
                 
                 print_speakers(speakers)
                 speaker_id = get_speaker_id('Speaker ID: ')
-                length_scale
                 out_path = input('Path to save: ')
 
                 try:
@@ -173,16 +175,7 @@ if __name__ == '__main__':
 
             target_id = get_speaker_id('Target speaker ID: ')
             out_path = input('Path to save: ')
-            length_scale=re.search(r'\[LENGTH=(.+?)\]',out_path)
-            if length_scale:
-                try:
-                    out_path=re.sub(r'\[LENGTH=(.+?)\]','',out_path,1)
-                    length_scale=float(length_scale.group(1))
-                except:
-                    print('Invalid length scale!')
-                    sys.exit(1)
-            else:
-                length_scale=1
+            length_scale,out_path=get_label_value(out_path,'LENGTH',1,'length scale')
 
             from torch import inference_mode
             try:

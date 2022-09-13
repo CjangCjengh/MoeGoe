@@ -255,7 +255,7 @@ def japanese_to_romaji_with_accent(text):
           text += phoneme.replace('ch','ʧ').replace('sh','ʃ').replace('cl','Q')
         else:
           continue
-        n_moras = int(re.search(r'/F:(\d+)_', label).group(1))
+        # n_moras = int(re.search(r'/F:(\d+)_', label).group(1))
         a1 = int(re.search(r"/A:(\-?[0-9]+)\+", label).group(1))
         a2 = int(re.search(r"\+(\d+)\+", label).group(1))
         a3 = int(re.search(r"\+(\d+)/", label).group(1))
@@ -267,7 +267,7 @@ def japanese_to_romaji_with_accent(text):
         if a3 == 1 and a2_next == 1:
           text += ' '
         # Falling
-        elif a1 == 0 and a2_next == a2 + 1 and a2 != n_moras:
+        elif a1 == 0 and a2_next == a2 + 1:
           text += '↓'
         # Rising
         elif a2 == 1 and a2_next == 2:

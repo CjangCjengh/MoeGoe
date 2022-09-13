@@ -66,33 +66,20 @@ def get_label(text,label):
 if __name__ == '__main__':
     model = input('Path of a VITS model: ')
     config = input('Path of a config file: ')
-    try:
-        hps_ms = utils.get_hparams_from_file(config)
-        if 'n_speakers' in hps_ms.data.keys():
-            n_speakers=hps_ms.data.n_speakers
-        else:
-            n_speakers=0
-        if 'symbols' in hps_ms.keys():
-            n_symbols=len(hps_ms.symbols)
-        else:
-            n_symbols=0
-        if 'speakers' in hps_ms.keys():
-            speakers=hps_ms.speakers
-        elif n_speakers>0:
-            speakers=[str(i) for i in range(n_speakers)]
-        else:
-            speakers=['0']
-        net_g_ms = SynthesizerTrn(
-            n_symbols,
-            hps_ms.data.filter_length // 2 + 1,
-            hps_ms.train.segment_size // hps_ms.data.hop_length,
-            n_speakers=n_speakers,
-            **hps_ms.model)
-        _ = net_g_ms.eval()
-        utils.load_checkpoint(model, net_g_ms)
-    except:
-        print('Failed to load!')
-        sys.exit(1)
+    
+    hps_ms = utils.get_hparams_from_file(config)
+    n_speakers = hps_ms.data.n_speakers if 'n_speakers' in hps_ms.data.keys() else 0
+    n_symbols = len(hps_ms.symbols) if 'symbols' in hps_ms.keys() else 0
+    speakers = hps_ms.speakers if 'speakers' in hps_ms.keys() else ['0']
+
+    net_g_ms = SynthesizerTrn(
+        n_symbols,
+        hps_ms.data.filter_length // 2 + 1,
+        hps_ms.train.segment_size // hps_ms.data.hop_length,
+        n_speakers=n_speakers,
+        **hps_ms.model)
+    _ = net_g_ms.eval()
+    utils.load_checkpoint(model, net_g_ms)
     
     if n_symbols!=0:
         while True:
@@ -106,27 +93,22 @@ if __name__ == '__main__':
                     continue
                 
                 length_scale,text=get_label_value(text,'LENGTH',1,'length scale')
+                noise_scale,text=get_label_value(text,'NOISE',0.667,'noise scale')
+                noise_scale_w,text=get_label_value(text,'NOISEW',0.8,'deviation of noise')
                 cleaned,text=get_label(text,'CLEANED')
-                try:
-                    stn_tst = get_text(text, hps_ms, cleaned=cleaned)
-                except:
-                    print('Invalid text!')
-                    sys.exit(1)
+
+                stn_tst = get_text(text, hps_ms, cleaned=cleaned)
                 
                 print_speakers(speakers)
                 speaker_id = get_speaker_id('Speaker ID: ')
                 out_path = input('Path to save: ')
 
-                try:
-                    with no_grad():
-                        x_tst = stn_tst.unsqueeze(0)
-                        x_tst_lengths = LongTensor([stn_tst.size(0)])
-                        sid = LongTensor([speaker_id])
-                        audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=length_scale)[0][0,0].data.cpu().float().numpy()
-                    write(out_path, hps_ms.data.sampling_rate, audio)
-                except:
-                    print('Failed to generate!')
-                    sys.exit(1)
+                with no_grad():
+                    x_tst = stn_tst.unsqueeze(0)
+                    x_tst_lengths = LongTensor([stn_tst.size(0)])
+                    sid = LongTensor([speaker_id])
+                    audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=noise_scale, noise_scale_w=noise_scale_w, length_scale=length_scale)[0][0,0].data.cpu().float().numpy()
+                write(out_path, hps_ms.data.sampling_rate, audio)
                 
                 print('Successfully saved!')
                 ask_if_continue()
@@ -149,45 +131,58 @@ if __name__ == '__main__':
                 spec_lengths = LongTensor([spec.size(-1)])
                 sid_src = LongTensor([originnal_id])
 
-                try:
-                    with no_grad():
-                        sid_tgt = LongTensor([target_id])
-                        audio = net_g_ms.voice_conversion(spec, spec_lengths, sid_src=sid_src, sid_tgt=sid_tgt)[0][0,0].data.cpu().float().numpy()
-                    write(out_path, hps_ms.data.sampling_rate, audio)
-                except:
-                    print('Failed to generate!')
-                    sys.exit(1)
+                with no_grad():
+                    sid_tgt = LongTensor([target_id])
+                    audio = net_g_ms.voice_conversion(spec, spec_lengths, sid_src=sid_src, sid_tgt=sid_tgt)[0][0,0].data.cpu().float().numpy()
+                write(out_path, hps_ms.data.sampling_rate, audio)
                         
                 print('Successfully saved!')
                 ask_if_continue()
     else:
         model = input('Path of a hubert-soft model: ')
         from hubert_model import hubert_soft
-        try:
-            hubert = hubert_soft(model)
-        except:
-            print('Failed to load!')
-            sys.exit(1)
+        hubert = hubert_soft(model)
+
         while True:
             audio_path = input('Path of an audio file to convert:\n')
             print_speakers(speakers)
-            audio = utils.load_audio_to_torch(audio_path, 16000).unsqueeze(0).unsqueeze(0)
-
+            import librosa
+            use_f0 = hps_ms.data.use_f0 if 'use_f0' in hps_ms.data.keys() else False
+            
+            if use_f0:
+                audio, sampling_rate = librosa.load(audio_path, sr=hps_ms.data.sampling_rate, mono=True)
+                audio16000 = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)
+            else:
+                audio16000, sampling_rate = librosa.load(audio_path, sr=16000, mono=True)
+            
             target_id = get_speaker_id('Target speaker ID: ')
             out_path = input('Path to save: ')
             length_scale,out_path=get_label_value(out_path,'LENGTH',1,'length scale')
-
-            from torch import inference_mode
-            try:
-                with inference_mode():
-                    unit = hubert.units(audio)
-                    unit_lengths = LongTensor([unit.size(1)])
-                    sid = LongTensor([target_id])
-                    audio = net_g_ms.infer(unit, unit_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=length_scale)[0][0,0].data.float().numpy()
-                write(out_path, hps_ms.data.sampling_rate, audio)
-            except:
-                print('Failed to generate!')
-                sys.exit(1)
+            noise_scale,out_path=get_label_value(out_path,'NOISE',0.1,'noise scale')
+            noise_scale_w,out_path=get_label_value(out_path,'NOISEW',0.1,'deviation of noise')
+                
+            from torch import inference_mode, FloatTensor
+            import numpy as np
+            with inference_mode():
+                units = hubert.units(FloatTensor(audio16000).unsqueeze(0).unsqueeze(0)).squeeze(0).numpy()
+                if use_f0:
+                    f0_scale,out_path = get_label_value(out_path,'F0',1,'f0 scale')
+                    f0 = librosa.pyin(audio, sr=sampling_rate,
+                        fmin=librosa.note_to_hz('C0'),
+                        fmax=librosa.note_to_hz('C7'),
+                        frame_length=1780)[0]
+                    target_length = len(units[:, 0])
+                    f0 = np.nan_to_num(np.interp(np.arange(0, len(f0)*target_length, len(f0))/target_length,
+                        np.arange(0, len(f0)), f0)) * f0_scale
+                    units[:, 0] = f0 / 10
+            
+            stn_tst = FloatTensor(units)
+            with no_grad():
+                x_tst = stn_tst.unsqueeze(0)
+                x_tst_lengths = LongTensor([stn_tst.size(0)])
+                sid = LongTensor([0])
+                audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=noise_scale, noise_scale_w=noise_scale_w, length_scale=length_scale)[0][0, 0].data.float().numpy()
+            write(out_path, hps_ms.data.sampling_rate, audio)
             
             print('Successfully saved!')
             ask_if_continue()

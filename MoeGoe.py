@@ -180,7 +180,7 @@ if __name__ == '__main__':
             with no_grad():
                 x_tst = stn_tst.unsqueeze(0)
                 x_tst_lengths = LongTensor([stn_tst.size(0)])
-                sid = LongTensor([0])
+                sid = LongTensor([target_id])
                 audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=noise_scale, noise_scale_w=noise_scale_w, length_scale=length_scale)[0][0, 0].data.float().numpy()
             write(out_path, hps_ms.data.sampling_rate, audio)
             

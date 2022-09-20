@@ -71,6 +71,7 @@ if __name__ == '__main__':
     n_speakers = hps_ms.data.n_speakers if 'n_speakers' in hps_ms.data.keys() else 0
     n_symbols = len(hps_ms.symbols) if 'symbols' in hps_ms.keys() else 0
     speakers = hps_ms.speakers if 'speakers' in hps_ms.keys() else ['0']
+    use_f0 = hps_ms.data.use_f0 if 'use_f0' in hps_ms.data.keys() else False
 
     net_g_ms = SynthesizerTrn(
         n_symbols,
@@ -146,9 +147,8 @@ if __name__ == '__main__':
         while True:
             audio_path = input('Path of an audio file to convert:\n')
             print_speakers(speakers)
-            import librosa
-            use_f0 = hps_ms.data.use_f0 if 'use_f0' in hps_ms.data.keys() else False
             
+            import librosa
             if use_f0:
                 audio, sampling_rate = librosa.load(audio_path, sr=hps_ms.data.sampling_rate, mono=True)
                 audio16000 = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)

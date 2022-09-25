@@ -17,10 +17,9 @@ _symbols_to_japanese = [(re.compile('%s' % x[0]), x[1]) for x in [
 ]]
 
 # List of (romaji, ipa) pairs for marks:
-_romaji_to_ipa = [(re.compile('%s' % x[0], re.IGNORECASE), x[1]) for x in [
+_romaji_to_ipa = [(re.compile('%s' % x[0]), x[1]) for x in [
     ('ts', 'ʦ'),
     ('u', 'ɯ'),
-    ('...', '…'),
     ('j', 'ʥ'),
     ('y', 'j'),
     ('ni', 'n^i'),
@@ -122,7 +121,7 @@ def get_real_hatsuon(text):
 
 
 def japanese_to_ipa(text):
-    text=japanese_to_romaji_with_accent(text)
+    text=japanese_to_romaji_with_accent(text).replace('...', '…')
     for regex, replacement in _romaji_to_ipa:
         text = re.sub(regex, replacement, text)
     text = re.sub(

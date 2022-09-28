@@ -199,7 +199,7 @@ def number_to_hangul(text):
 def korean_to_lazy_ipa(text):
     text = latin_to_hangul(text)
     text = number_to_hangul(text)
-    text=re.sub('[\uac00-\ud7af]+',lambda x:ko_pron.romanise(x.group(0),'ipa'),text).split('] ~ [')[0]
+    text=re.sub('[\uac00-\ud7af]+',lambda x:ko_pron.romanise(x.group(0),'ipa').split('] ~ [')[0],text)
     for regex, replacement in _ipa_to_lazy_ipa:
         text = re.sub(regex, replacement, text)
     return text

@@ -32,6 +32,22 @@ _romaji_to_ipa = [(re.compile('%s' % x[0]), x[1]) for x in [
     ('r', 'ɾ')
 ]]
 
+# List of (romaji, ipa2) pairs for marks:
+_romaji_to_ipa2 = [(re.compile('%s' % x[0]), x[1]) for x in [
+    ('u', 'ɯ'),
+    ('ʧ', 'tʃ'),
+    ('j', 'dʑ'),
+    ('y', 'j'),
+    ('ni', 'n^i'),
+    ('nj', 'n^'),
+    ('hi', 'çi'),
+    ('hj', 'ç'),
+    ('f', 'ɸ'),
+    ('I', 'i*'),
+    ('U', 'ɯ*'),
+    ('r', 'ɾ')
+]]
+
 # Dictinary of (consonant, sokuon) pairs:
 _real_sokuon = {
   'k': 'k#',
@@ -126,6 +142,15 @@ def japanese_to_ipa(text):
         text = re.sub(regex, replacement, text)
     text = re.sub(
             r'([A-Za-zɯ])\1+', lambda x: x.group(0)[0]+'ː'*(len(x.group(0))-1), text)
+    text = get_real_sokuon(text)
+    text = get_real_hatsuon(text)
+    return text
+
+
+def japanese_to_ipa2(text):
+    text=japanese_to_romaji_with_accent(text).replace('...', '…')
+    for regex, replacement in _romaji_to_ipa2:
+        text = re.sub(regex, replacement, text)
     text = get_real_sokuon(text)
     text = get_real_hatsuon(text)
     return text

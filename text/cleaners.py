@@ -65,10 +65,12 @@ def cjks_cleaners(text):
     from text.japanese import japanese_to_ipa
     from text.korean import korean_to_lazy_ipa
     from text.sanskrit import devanagari_to_ipa
+    from text.english import english_to_lazy_ipa
     chinese_texts = re.findall(r'\[ZH\].*?\[ZH\]', text)
     japanese_texts = re.findall(r'\[JA\].*?\[JA\]', text)
     korean_texts = re.findall(r'\[KO\].*?\[KO\]', text)
     sanskrit_texts = re.findall(r'\[SA\].*?\[SA\]', text)
+    english_texts = re.findall(r'\[EN\].*?\[EN\]', text)
     for chinese_text in chinese_texts:
         cleaned_text = chinese_to_lazy_ipa(chinese_text[4:-4])
         text = text.replace(chinese_text, cleaned_text+' ', 1)
@@ -81,7 +83,77 @@ def cjks_cleaners(text):
     for sanskrit_text in sanskrit_texts:
         cleaned_text = devanagari_to_ipa(sanskrit_text[4:-4])
         text = text.replace(sanskrit_text, cleaned_text+' ', 1)
+    for english_text in english_texts:
+        cleaned_text = english_to_lazy_ipa(english_text[4:-4])
+        text = text.replace(english_text, cleaned_text+' ', 1)
     text = text[:-1]
     if re.match(r'[^\.,!\?\-…~]', text[-1]):
         text += '.'
+    return text
+
+
+def cjke_cleaners(text):
+    from text.mandarin import chinese_to_lazy_ipa
+    from text.japanese import japanese_to_ipa
+    from text.korean import korean_to_ipa
+    from text.english import english_to_ipa2
+    chinese_texts = re.findall(r'\[ZH\].*?\[ZH\]', text)
+    japanese_texts = re.findall(r'\[JA\].*?\[JA\]', text)
+    korean_texts = re.findall(r'\[KO\].*?\[KO\]', text)
+    english_texts = re.findall(r'\[EN\].*?\[EN\]', text)
+    for chinese_text in chinese_texts:
+        cleaned_text = chinese_to_lazy_ipa(chinese_text[4:-4])
+        cleaned_text = cleaned_text.replace(
+            'ʧ', 'tʃ').replace('ʦ', 'ts').replace('ɥan', 'ɥæn')
+        text = text.replace(chinese_text, cleaned_text+' ', 1)
+    for japanese_text in japanese_texts:
+        cleaned_text = japanese_to_ipa(japanese_text[4:-4])
+        cleaned_text = cleaned_text.replace('ʧ', 'tʃ').replace(
+            'ʦ', 'ts').replace('ɥan', 'ɥæn').replace('ʥ', 'dz')
+        text = text.replace(japanese_text, cleaned_text+' ', 1)
+    for korean_text in korean_texts:
+        cleaned_text = korean_to_ipa(korean_text[4:-4])
+        text = text.replace(korean_text, cleaned_text+' ', 1)
+    for english_text in english_texts:
+        cleaned_text = english_to_ipa2(english_text[4:-4])
+        cleaned_text = cleaned_text.replace('ɑ', 'a').replace(
+            'ɔ', 'o').replace('ɛ', 'e').replace('ɪ', 'i').replace('ʊ', 'u')
+        text = text.replace(english_text, cleaned_text+' ', 1)
+    text = text[:-1]
+    if re.match(r'[^\.,!\?\-…~]', text[-1]):
+        text += '.'
+    return text
+
+
+def cjke_cleaners2(text):
+    from text.mandarin import chinese_to_ipa
+    from text.japanese import japanese_to_ipa2
+    from text.korean import korean_to_ipa
+    from text.english import english_to_ipa2
+    chinese_texts = re.findall(r'\[ZH\].*?\[ZH\]', text)
+    japanese_texts = re.findall(r'\[JA\].*?\[JA\]', text)
+    korean_texts = re.findall(r'\[KO\].*?\[KO\]', text)
+    english_texts = re.findall(r'\[EN\].*?\[EN\]', text)
+    for chinese_text in chinese_texts:
+        cleaned_text = chinese_to_ipa(chinese_text[4:-4])
+        text = text.replace(chinese_text, cleaned_text+' ', 1)
+    for japanese_text in japanese_texts:
+        cleaned_text = japanese_to_ipa2(japanese_text[4:-4])
+        text = text.replace(japanese_text, cleaned_text+' ', 1)
+    for korean_text in korean_texts:
+        cleaned_text = korean_to_ipa(korean_text[4:-4])
+        text = text.replace(korean_text, cleaned_text+' ', 1)
+    for english_text in english_texts:
+        cleaned_text = english_to_ipa2(english_text[4:-4])
+        text = text.replace(english_text, cleaned_text+' ', 1)
+    text = text[:-1]
+    if re.match(r'[^\.,!\?\-…~]', text[-1]):
+        text += '.'
+    return text
+
+
+def thai_cleaners(text):
+    from text.thai import num_to_thai, latin_to_thai
+    text = num_to_thai(text)
+    text = latin_to_thai(text)
     return text

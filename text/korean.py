@@ -203,3 +203,8 @@ def korean_to_lazy_ipa(text):
     for regex, replacement in _ipa_to_lazy_ipa:
         text = re.sub(regex, replacement, text)
     return text
+
+
+def korean_to_ipa(text):
+    text = korean_to_lazy_ipa(text)
+    return text.replace('ʧ','tʃ').replace('ʥ','dʑ')

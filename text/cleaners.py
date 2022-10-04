@@ -157,3 +157,11 @@ def thai_cleaners(text):
     text = num_to_thai(text)
     text = latin_to_thai(text)
     return text
+
+
+def shanghainese_cleaners(text):
+    from text.shanghainese import shanghainese_to_ipa
+    text = shanghainese_to_ipa(text)
+    if re.match(r'[^\.,!\?\-…~]', text[-1]):
+        text += '.'
+    return text

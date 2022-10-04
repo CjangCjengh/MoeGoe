@@ -12,6 +12,12 @@ from mel_processing import spectrogram_torch
 
 from scipy.io.wavfile import write
 
+def ex_print(text,escape=False):
+    if escape:
+        print(text.encode('unicode_escape').decode())
+    else:
+        print(text)
+
 def get_text(text, hps, cleaned=False):
     if cleaned:
         text_norm = text_to_sequence(text, hps.symbols, [])
@@ -30,10 +36,10 @@ def ask_if_continue():
         elif answer == 'n':
             sys.exit(0)
 
-def print_speakers(speakers):
+def print_speakers(speakers,escape=False):
     print('ID\tSpeaker')
     for id, name in enumerate(speakers):
-        print(str(id) + '\t' + name)
+        ex_print(str(id) + '\t' + name,escape)
 
 def get_speaker_id(message):
     speaker_id = input(message)
@@ -64,6 +70,11 @@ def get_label(text,label):
         return False,text
 
 if __name__ == '__main__':
+    if '--escape' in sys.argv:
+        escape=True
+    else:
+        escape=False
+    
     model = input('Path of a VITS model: ')
     config = input('Path of a config file: ')
     
@@ -90,7 +101,7 @@ if __name__ == '__main__':
                 if text=='[ADVANCED]':
                     text = input('Raw text:')
                     print('Cleaned text is:')
-                    print(_clean_text(text, hps_ms.data.text_cleaners))
+                    ex_print(_clean_text(text, hps_ms.data.text_cleaners),escape)
                     continue
                 
                 length_scale,text=get_label_value(text,'LENGTH',1,'length scale')
@@ -100,7 +111,7 @@ if __name__ == '__main__':
 
                 stn_tst = get_text(text, hps_ms, cleaned=cleaned)
                 
-                print_speakers(speakers)
+                print_speakers(speakers,escape)
                 speaker_id = get_speaker_id('Speaker ID: ')
                 out_path = input('Path to save: ')
 

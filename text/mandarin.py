@@ -328,6 +328,6 @@ def chinese_to_ipa2(text, taiwanese=False):
     text = bopomofo_to_ipa2(text)
     text = re.sub(r'i([aoe])', r'j\1', text)
     text = re.sub(r'u([aoəe])', r'w\1', text)
-    text = re.sub(r'([ʂɹ]`ʰ?)([˩˨˧˦˥ ]+|$)', r'\1ʅ\2', text)
+    text = re.sub(r'([ʂɹ]ʰ?)([˩˨˧˦˥ ]+|$)', r'\1ʅ\2', text)
     text = re.sub(r'(sʰ?)([˩˨˧˦˥ ]+|$)', r'\1ɿ\2', text)
     return text

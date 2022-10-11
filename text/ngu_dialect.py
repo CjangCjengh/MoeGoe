@@ -11,7 +11,10 @@ dialects = {'SZ': 'suzhou', 'WX': 'wuxi', 'CZ': 'changzhou', 'HZ': 'hangzhou',
 converters = {}
 
 for dialect in dialects.values():
-    converters[dialect] = opencc.OpenCC(dialect)
+    try:
+        converters[dialect] = opencc.OpenCC(dialect)
+    except:
+        pass
 
 
 def ngu_dialect_to_ipa(text, dialect):

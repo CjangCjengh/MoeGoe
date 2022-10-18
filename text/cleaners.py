@@ -129,10 +129,8 @@ def chinese_dialect_cleaners(text):
     from text.cantonese import cantonese_to_ipa
     from text.english import english_to_lazy_ipa2
     from text.ngu_dialect import ngu_dialect_to_ipa
-    text = re.sub(r'\[(MD|ZH)\](.*?)\[\1\]',
-                  lambda x: chinese_to_ipa2(x.group(2))+' ', text)
-    text = re.sub(r'\[TW\](.*?)\[TW\]',
-                  lambda x: chinese_to_ipa2(x.group(1), True)+' ', text)
+    text = re.sub(r'\[ZH\](.*?)\[ZH\]',
+                  lambda x: chinese_to_ipa2(x.group(1))+' ', text)
     text = re.sub(r'\[JA\](.*?)\[JA\]',
                   lambda x: japanese_to_ipa3(x.group(1)).replace('Q', 'ʔ')+' ', text)
     text = re.sub(r'\[SH\](.*?)\[SH\]', lambda x: shanghainese_to_ipa(x.group(1)).replace('1', '˥˧').replace('5',

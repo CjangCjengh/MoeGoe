@@ -120,11 +120,6 @@ if __name__ == '__main__':
                     x_tst_lengths = LongTensor([stn_tst.size(0)])
                     sid = LongTensor([speaker_id])
                     audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=noise_scale, noise_scale_w=noise_scale_w, length_scale=length_scale)[0][0,0].data.cpu().float().numpy()
-                write(out_path, hps_ms.data.sampling_rate, audio)
-                
-                print('Successfully saved!')
-                ask_if_continue()
-                
                     
             elif choice == 'v':
                 audio_path = input('Path of an audio file to convert:\n')
@@ -146,10 +141,10 @@ if __name__ == '__main__':
                 with no_grad():
                     sid_tgt = LongTensor([target_id])
                     audio = net_g_ms.voice_conversion(spec, spec_lengths, sid_src=sid_src, sid_tgt=sid_tgt)[0][0,0].data.cpu().float().numpy()
-                write(out_path, hps_ms.data.sampling_rate, audio)
-                        
-                print('Successfully saved!')
-                ask_if_continue()
+            
+            write(out_path, hps_ms.data.sampling_rate, audio)
+            print('Successfully saved!')
+            ask_if_continue()
     else:
         model = input('Path of a hubert-soft model: ')
         from hubert_model import hubert_soft
@@ -157,43 +152,64 @@ if __name__ == '__main__':
 
         while True:
             audio_path = input('Path of an audio file to convert:\n')
+            origin_speaker,audio_path=get_label(audio_path,'VC')
             print_speakers(speakers)
-            
-            import librosa
-            if use_f0:
-                audio, sampling_rate = librosa.load(audio_path, sr=hps_ms.data.sampling_rate, mono=True)
-                audio16000 = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)
-            else:
-                audio16000, sampling_rate = librosa.load(audio_path, sr=16000, mono=True)
-            
-            target_id = get_speaker_id('Target speaker ID: ')
-            out_path = input('Path to save: ')
-            length_scale,out_path=get_label_value(out_path,'LENGTH',1,'length scale')
-            noise_scale,out_path=get_label_value(out_path,'NOISE',0.1,'noise scale')
-            noise_scale_w,out_path=get_label_value(out_path,'NOISEW',0.1,'deviation of noise')
-                
-            from torch import inference_mode, FloatTensor
-            import numpy as np
-            with inference_mode():
-                units = hubert.units(FloatTensor(audio16000).unsqueeze(0).unsqueeze(0)).squeeze(0).numpy()
+
+            if not origin_speaker:
+                import librosa
                 if use_f0:
-                    f0_scale,out_path = get_label_value(out_path,'F0',1,'f0 scale')
-                    f0 = librosa.pyin(audio, sr=sampling_rate,
-                        fmin=librosa.note_to_hz('C0'),
-                        fmax=librosa.note_to_hz('C7'),
-                        frame_length=1780)[0]
-                    target_length = len(units[:, 0])
-                    f0 = np.nan_to_num(np.interp(np.arange(0, len(f0)*target_length, len(f0))/target_length,
-                        np.arange(0, len(f0)), f0)) * f0_scale
-                    units[:, 0] = f0 / 10
+                    audio, sampling_rate = librosa.load(audio_path, sr=hps_ms.data.sampling_rate, mono=True)
+                    audio16000 = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)
+                else:
+                    audio16000, sampling_rate = librosa.load(audio_path, sr=16000, mono=True)
+                
+                target_id = get_speaker_id('Target speaker ID: ')
+                out_path = input('Path to save: ')
+                length_scale,out_path=get_label_value(out_path,'LENGTH',1,'length scale')
+                noise_scale,out_path=get_label_value(out_path,'NOISE',0.1,'noise scale')
+                noise_scale_w,out_path=get_label_value(out_path,'NOISEW',0.1,'deviation of noise')
+                    
+                from torch import inference_mode, FloatTensor
+                import numpy as np
+                with inference_mode():
+                    units = hubert.units(FloatTensor(audio16000).unsqueeze(0).unsqueeze(0)).squeeze(0).numpy()
+                    if use_f0:
+                        f0_scale,out_path = get_label_value(out_path,'F0',1,'f0 scale')
+                        f0 = librosa.pyin(audio, sr=sampling_rate,
+                            fmin=librosa.note_to_hz('C0'),
+                            fmax=librosa.note_to_hz('C7'),
+                            frame_length=1780)[0]
+                        target_length = len(units[:, 0])
+                        f0 = np.nan_to_num(np.interp(np.arange(0, len(f0)*target_length, len(f0))/target_length,
+                            np.arange(0, len(f0)), f0)) * f0_scale
+                        units[:, 0] = f0 / 10
+                
+                stn_tst = FloatTensor(units)
+                with no_grad():
+                    x_tst = stn_tst.unsqueeze(0)
+                    x_tst_lengths = LongTensor([stn_tst.size(0)])
+                    sid = LongTensor([target_id])
+                    audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=noise_scale, noise_scale_w=noise_scale_w, length_scale=length_scale)[0][0, 0].data.float().numpy()
             
-            stn_tst = FloatTensor(units)
-            with no_grad():
-                x_tst = stn_tst.unsqueeze(0)
-                x_tst_lengths = LongTensor([stn_tst.size(0)])
-                sid = LongTensor([target_id])
-                audio = net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=noise_scale, noise_scale_w=noise_scale_w, length_scale=length_scale)[0][0, 0].data.float().numpy()
+            else:
+                audio = utils.load_audio_to_torch(audio_path, hps_ms.data.sampling_rate)
+
+                originnal_id = get_speaker_id('Original speaker ID: ')
+                target_id = get_speaker_id('Target speaker ID: ')
+                out_path = input('Path to save: ')
+
+                y = audio.unsqueeze(0)
+
+                spec = spectrogram_torch(y, hps_ms.data.filter_length,
+                    hps_ms.data.sampling_rate, hps_ms.data.hop_length, hps_ms.data.win_length,
+                    center=False)
+                spec_lengths = LongTensor([spec.size(-1)])
+                sid_src = LongTensor([originnal_id])
+
+                with no_grad():
+                    sid_tgt = LongTensor([target_id])
+                    audio = net_g_ms.voice_conversion(spec, spec_lengths, sid_src=sid_src, sid_tgt=sid_tgt)[0][0,0].data.cpu().float().numpy()
+                    
             write(out_path, hps_ms.data.sampling_rate, audio)
-            
             print('Successfully saved!')
             ask_if_continue()

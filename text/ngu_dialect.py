@@ -20,7 +20,7 @@ for dialect in dialects.values():
 
 def ngu_dialect_to_ipa(text, dialect):
     dialect = dialects[dialect]
-    text = converters[dialect].convert(text).replace('$',' ')
+    text = converters[dialect].convert(text).replace('-','').replace('$',' ')
     text = re.sub(r'[、；：]', '，', text)
     text = re.sub(r'\s*，\s*', ', ', text)
     text = re.sub(r'\s*。\s*', '. ', text)

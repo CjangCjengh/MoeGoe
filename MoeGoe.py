@@ -167,9 +167,13 @@ if __name__ == '__main__':
                 print('Successfully saved!')
                 ask_if_continue()
         else:
+            import os
+            import librosa
+            import numpy as np
+            from torch import FloatTensor
             import audonnx
-            w2v2_folder = input('Folder of a w2v2 dimensional emotion model: ')
-            w2v2_model = audonnx.load(w2v2_folder)
+            w2v2_folder = input('Path of a w2v2 dimensional emotion model: ')
+            w2v2_model = audonnx.load(os.path.dirname(w2v2_folder))
             while True:
                 choice = input('TTS or VC? (t/v):')
                 if choice == 't':
@@ -206,6 +210,7 @@ if __name__ == '__main__':
                         emotion_reference = re.sub(
                             r'\..*$', '', emotion_reference)
                         np.save(emotion_reference, emotion.squeeze(0))
+                        emotion = FloatTensor(emotion)
 
                     out_path = input('Path to save: ')
 

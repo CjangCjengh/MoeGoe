@@ -171,7 +171,7 @@ class TextEncoder(nn.Module):
   def forward(self, x, x_lengths, emotion_embedding=None):
     if self.n_vocab!=0:
       x = self.emb(x) * math.sqrt(self.hidden_channels) # [b, t, h]
-    if emotion_embedding:
+    if emotion_embedding is not None:
       x = x + self.emotion_emb(emotion_embedding.unsqueeze(1))
     x = torch.transpose(x, 1, -1) # [b, h, t]
     x_mask = torch.unsqueeze(commons.sequence_mask(x_lengths, x.size(2)), 1).to(x.dtype)

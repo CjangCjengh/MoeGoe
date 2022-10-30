@@ -3,6 +3,16 @@ librosa
 numpy==1.22.0
 scipy
 torch
-Unidecode
+unidecode
 openjtalk>=0.3.0.dev2
 jamo
+pypinyin
+jieba
+protobuf
+cn2an
+inflect
+eng_to_ipa
+ko_pron
+indic_transliteration
+num_thai
+opencc

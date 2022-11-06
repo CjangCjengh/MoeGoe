@@ -246,6 +246,7 @@ if __name__ == '__main__':
                     audio16000, sampling_rate = librosa.load(
                         audio_path, sr=16000, mono=True)
 
+                print_speakers(speakers, escape)
                 target_id = get_speaker_id('Target speaker ID: ')
                 out_path = input('Path to save: ')
                 length_scale, out_path = get_label_value(

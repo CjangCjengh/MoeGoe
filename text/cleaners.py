@@ -46,8 +46,7 @@ def zh_ja_mixture_cleaners(text):
 
 def sanskrit_cleaners(text):
     text = text.replace('॥', '।').replace('ॐ', 'ओम्')
-    if text[-1] != '।':
-        text += ' ।'
+    text = re.sub(r'([^।])$', r'\1।', text)
     return text
 
 

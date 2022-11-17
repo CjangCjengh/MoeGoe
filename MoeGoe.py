@@ -40,6 +40,8 @@ def ask_if_continue():
 
 
 def print_speakers(speakers, escape=False):
+    if len(speakers) > 100:
+        return
     print('ID\tSpeaker')
     for id, name in enumerate(speakers):
         ex_print(str(id) + '\t' + name, escape)

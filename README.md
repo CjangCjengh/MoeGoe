@@ -1,6 +1,6 @@
 # Links
 - [MoeGoe_GUI](https://github.com/CjangCjengh/MoeGoe_GUI)
-- [Pretrained models](https://github.com/CjangCjengh/TTSModels) (For some reasons, this repository is temporarily set to private.)
+- [Pretrained models](https://github.com/CjangCjengh/TTSModels)
 
 # How to use
 Run MoeGoe.exe

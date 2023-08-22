@@ -1,10 +1,9 @@
-numba
 librosa
-numpy==1.22.0
+numpy==1.23.5
 scipy
 torch
 unidecode
-openjtalk>=0.3.0.dev2
+openjtalk==0.3.0.dev3
 jamo
 pypinyin
 jieba

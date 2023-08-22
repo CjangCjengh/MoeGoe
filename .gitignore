@@ -381,3 +381,6 @@ monotonic_align/core.c
 
 # MacOS
 .DS_Store
+
+# venv
+.venv
